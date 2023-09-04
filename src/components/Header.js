@@ -16,7 +16,7 @@ import { CryptoState } from "../CryptoContext";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#fff",
+      main: "#008000",
     },
     type: "dark",
   },

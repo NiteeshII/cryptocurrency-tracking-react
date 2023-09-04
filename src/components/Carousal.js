@@ -15,19 +15,24 @@ const useStyles = makeStyles((theme) => ({
   },
   carouselItem: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     cursor: "pointer",
     textTransform: "uppercase",
-    color: "white",
+    textDecoration: "none",
+    color: "White",
     marginRight: theme.spacing(2),
   },
 }));
 
+export const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
 const Carousal = () => {
   const [trending, setTrending] = useState([]);
   const classes = useStyles();
-  const { currency } = CryptoState();
+  const { currency, symbol } = CryptoState();
 
   const fetchTrendingCoins = async () => {
     try {
@@ -40,15 +45,36 @@ const Carousal = () => {
   };
 
   const items = trending.map((coins) => {
+    let profit = coins?.price_change_percentage_24h >= 0;
     return (
-      <Link className={classes?.carouselItem} to={`/coins/${coins.id}`}>
+      <Link
+        key={coins.id}
+        className={classes?.carouselItem}
+        to={`/coins/${coins.id}`}
+      >
         <img
           className={classes.image}
           src={coins?.image}
-          alt={coins?.name}
+          alt={coins.name}
           height="80"
           style={{ marginBottom: 10 }}
         />
+        <span>
+          {coins?.symbol}&nbsp;
+          <span
+            style={{
+              color: profit > 0 ? "rgb(14, 203 ,129)" : "red",
+              fontWeight: 500,
+            }}
+          >
+            {profit && "+"}
+            {coins?.price_change_percentage_24h?.toFixed(2)}%
+          </span>
+        </span>
+
+        <span style={{ fontSize: 18, fontWeight: 500 }}>
+          {symbol} {numberWithCommas(coins?.current_price.toFixed(2))}
+        </span>
       </Link>
     );
   });
@@ -76,9 +102,10 @@ const Carousal = () => {
         autoPlayInterval={1000}
         animationDuration={1500}
         disableDotsControls
+        disableButtonsControls
         responsive={responsive}
-        autoPlay
         items={items}
+        autoPlay
       />
     </div>
   );
