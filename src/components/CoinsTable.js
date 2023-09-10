@@ -20,7 +20,8 @@ import { CoinList } from "./../config/api";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "@material-ui/lab";
-
+// import MyErrorBoundary from "../ErrorBoundries/classErrorBoundary";
+import { useErrorBoundary } from "react-error-boundary";
 const useStyles = makeStyles(() => ({
   row: {
     backgroundColor: "#16171a",
@@ -42,6 +43,9 @@ const CoinsTable = () => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [pages, setPages] = useState(1);
+  // const [hasError, setHasError] = useState(false);
+
+  const { showBoundary } = useErrorBoundary();
 
   const navigate = useNavigate();
   const classes = useStyles();
@@ -55,10 +59,12 @@ const CoinsTable = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      if (error) showBoundary(error);
+
+      // setHasError(true);
+      // throw new Error("Hey there is an error");
     }
   };
-
-  console.log(coins);
 
   useEffect(() => {
     fetchCoins();
@@ -149,7 +155,10 @@ const CoinsTable = () => {
                           style={{ display: "flex", flexDirection: "column" }}
                         >
                           <span
-                            style={{ textTransform: "uppercase", fontSize: 22 }}
+                            style={{
+                              textTransform: "uppercase",
+                              fontSize: 22,
+                            }}
                           >
                             {row.symbol}
                           </span>

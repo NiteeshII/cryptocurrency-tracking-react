@@ -53,11 +53,8 @@ const CoinInfo = ({ coin }) => {
   const [days, setDays] = useState(1);
 
   const { currency } = CryptoState();
-
   const classes = useStyles();
-
   console.log(historicalData, "data");
-
   const fetchHistoricData = async () => {
     try {
       const { data } = await axios.get(

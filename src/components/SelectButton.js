@@ -23,9 +23,9 @@ const useStyles = makeStyles((props) => ({
 const SelectButton = ({ children, selected, onClick }) => {
   const classes = useStyles({ selected });
   return (
-    <div onClick={onClick} className={classes.selectbutton}>
+    <span onClick={onClick} className={classes.selectbutton}>
       {children}
-    </div>
+    </span>
   );
 };
 
